@@ -12,7 +12,7 @@ class CompanyController extends Controller
     //     return view('company.index',compact('name'));//compactは全部持ってくる
     // }
     public function __construct(){
-        $this->middleware('employer',['except'=>array('index')]);//indexだけは見ることができる
+        $this->middleware(['employer','verified'],['except'=>array('index')]);//indexだけは見ることができる
     }
 
     public function index($id, Company $company){

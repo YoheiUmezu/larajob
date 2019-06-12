@@ -13,7 +13,8 @@
 
 Route::get('/', 'JobController@index');//job controllerのindexページを表示する為に変更
 
-Auth::routes();
+//Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -73,6 +74,15 @@ Route::POST('employer/register', 'EmployerRegisterController@employerRegister')-
 
 //applying for a job
 Route::POST('/applications/{id}', 'JobController@apply')->name('apply');//postは大文字でPOSTにすること
+
+
+//save and unsave job
+Route::POST('/save/{id}', 'FavouriteController@savejob');
+Route::POST('/unsave/{id}', 'FavouriteController@unSaveJob');
+
+//search
+Route::get('/jobs/search','JobController@searchJobs');
+
 
 
 

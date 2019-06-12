@@ -15,7 +15,7 @@ class Employer
      */
     public function handle($request, Closure $next)
     {
-        
+
         if(Auth::check()&&Auth::user()->user_type=='employer')//もしユーザーがemployerだったら
         { return $next($request);
             } else {

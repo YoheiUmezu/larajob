@@ -8,14 +8,14 @@ class UserController extends Controller
 {
     //
     public function __construct(){
-        $this->middleware('seeker');//会社側はユーザーのページをいじれない
+        $this->middleware(['seeker','verified']);//会社側はユーザーのページをいじれない
     }
 
     public function index(){
         return view('profile.index');
     }
 
-    
+
 
     public function store(Request $request){
         $this->validate($request,[//validationに関する記述

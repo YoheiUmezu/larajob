@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label>Category</label>
-                <select name="category" id="" class="form-control">
+                <select name="category_id" id="" class="form-control">
                         <option value="">-select-</option>
                     @foreach(App\Category::all() as $cat)
                         <option value="{{$cat->id}}">{{$cat->name}}</option>
@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label>Address</Address></label>
-                <input type="text" name="address" class="form-control">&nbsp;&nbsp;&nbsp;
+                <input type="text" name="address" class="form-control">&nbsp;&nbsp;
             </div>
             <div class="form-group">
             <button type="submit" class="btn btn-outline-success">Search</button>

@@ -11,7 +11,7 @@ use Auth;
 class JobController extends Controller
 {
     public function __construct(){
-        $this->middleware('employer',['except'=>array('index','show','apply', 'allJobs')]);//indexとshowだけは見ることができる　applyも観ることtが出来る（下のaplly methodを参照）
+        $this->middleware(['employer','verified'],['except'=>array('index','show','apply', 'allJobs','searchJobs')]);//indexとshowだけは見ることができる　applyも観ることtが出来る（下のaplly methodを参照）
     }
     //
     public function index(){
@@ -90,18 +90,25 @@ class JobController extends Controller
         $category = $request->get('category_id');
         $address = $request->get('address');
         if($keyword||$type||$category||$address){
-            $jobs = Job::Where('title','LIKE','%'.$keyword.'%')//%で部分一致
-            ->orWhere('type',$type)//どこか検索ボックスが埋まってなくても大丈夫 orwhere
-            ->orwhere('category_id',$category)
-            ->orWhere('address',$address)
-            ->paginate(10);
-            return view('jobs.alljobs',compact('jobs'));
-        }else{//もし検索結果がなかったら、今あるまんまのページから動かない
-        //dd($keyword);//何が入ってるか確認する時に役立つ！！！
-        $jobs = Job::latest()->paginate(10);//1ページにつき10件
-        return view('jobs.alljobs',compact('jobs'));//ココのパートは登録してない人でも見れるようにするalljobs middlewareを編集
+            $jobs = Job::where('title','LIKE','%'.$keyword.'%')//部分一致
+                ->orWhere('type',$type)
+                ->orWhere('category_id',$category)
+                ->orWhere('address')
+                ->paginate(10);//もしデータが帰ってこなかったら、10件ずつ表示するリザルトページを返す
+                return view('jobs.alljobs',compact('jobs'));
+        }else{
+        //dd($address);
+        $jobs = Job::latest()->paginate(10);
+        return view('jobs.alljobs',compact('jobs'));
     }
-}
 
+        }
+        public function searchJobs(Request $request){
+            $keyword = $request->get('keyword');//keywordはvueから持ってきた
+            $users = Job::where('title','like','%'.$keyword.'%')
+                    ->orWhere('position','like','%'.$keyword.'%')
+                    ->limit(5)->get();
+            return response()->json($users);
+    }
 
 }
